@@ -41,6 +41,7 @@ public class TurretRightClick implements Listener
                 }
                 else
                 {
+                    // Add some message require re-import
                     activeSpheres.remove(turretID);
                     return;
                 }
@@ -48,6 +49,8 @@ public class TurretRightClick implements Listener
                 double xC = event.getPlayerTurret().getLocation().getX() + 0.5;
                 double yC = event.getPlayerTurret().getLocation().getY() + 2.3;
                 double zC = event.getPlayerTurret().getLocation().getZ() + 0.5;
+                long frequency = plugin.getConfig().getLong("config.sphere.display.frequency");
+                long cycles = plugin.getConfig().getLong("config.sphere.display.duration") / frequency;
                 Particle particle = Particle.valueOf(plugin.getConfig().getString("config.particle.particle_type").toUpperCase());
                 Particle.DustOptions data;
                 if ("REDSTONE".equals(plugin.getConfig().getString("config.particle.particle_type").toUpperCase()))
@@ -67,7 +70,7 @@ public class TurretRightClick implements Listener
                 }
                 new BukkitRunnable()
                 {
-                    int i = 20;
+                    long i = cycles;
 
                     @Override
                     public void run()
@@ -96,7 +99,7 @@ public class TurretRightClick implements Listener
                         }
                         i--;
                     }
-                }.runTaskTimerAsynchronously(plugin, 0L, 20L);
+                }.runTaskTimerAsynchronously(plugin, 0L, frequency);
             }
         }
     }
@@ -106,9 +109,8 @@ public class TurretRightClick implements Listener
         Map<String, Location> map = new HashMap<>();
         String mapKey;
         double pi = 3.14D;
-        double angleDivider = radius * 20;
-        double rotationAngleDivider = radius * 1;
-
+        double angleDivider = radius * plugin.getConfig().getDouble("config.sphere.calculation.ad_factor");
+        double rotationAngleDivider = radius * plugin.getConfig().getDouble("config.sphere.calculation.rad_factor");
         double x;
         double y;
         double z = 0;

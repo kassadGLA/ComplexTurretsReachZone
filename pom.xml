@@ -6,7 +6,7 @@
 
     <groupId>gla.kassad</groupId>
     <artifactId>ComplexTurretsReachZone</artifactId>
-    <version>0.3.10-alpha</version>
+    <version>0.3.13-alpha</version>
     <packaging>jar</packaging>
 
     <name>ComplexTurretsReachZone</name>

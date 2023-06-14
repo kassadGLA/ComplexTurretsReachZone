@@ -17,7 +17,6 @@ public class MainCommand implements CommandExecutor, TabCompleter
 {
     private static final ComplexTurretsReachZone plugin = ComplexTurretsReachZone.getPlugin(ComplexTurretsReachZone.class);
     private static final List<String> ARGS = new ArrayList<>(Arrays.asList("reimport", "reload"));
-    private static final ConsoleCommandSender console = Bukkit.getServer().getConsoleSender();
     private static boolean isImporting;
 
     @Override

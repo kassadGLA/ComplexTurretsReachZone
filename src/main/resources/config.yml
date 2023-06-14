@@ -1,4 +1,12 @@
 config:
+  sphere:
+    calculation:
+      ad_factor: 20
+      rad_factor: 2
+    display:
+      frequency: 20
+      duration: 400
+
   particle:
     particle_type: VILLAGER_HAPPY
     particle_data:
@@ -16,4 +24,4 @@ messages:
   invalid_argument: "%prefix% &cInvalid argument &9%arg%&c."
   no_permission: "&cNo permission."
 
-config_version: 2
+config_version: 3

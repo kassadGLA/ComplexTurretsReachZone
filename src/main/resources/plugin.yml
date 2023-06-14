@@ -9,5 +9,3 @@ commands:
   ctrz:
     description: Main plugin command
     usage: /<command> [reimport|reload]
-
-

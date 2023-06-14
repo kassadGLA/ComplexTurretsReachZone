@@ -12,19 +12,13 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        // Plugin startup logic
-
         getConfig().options().copyDefaults();
         saveDefaultConfig();
-
         this.radius = new Radius(Radius.loadRadii());
-        importRadiiOnLoad();
-
         getCommand("ctrz").setExecutor(new MainCommand());
         getCommand("ctrz").setTabCompleter(new MainCommand());
-
         getServer().getPluginManager().registerEvents(new TurretRightClick(), this);
-
+        importRadiiOnLoad();
         configUpdate();
     }
 
@@ -51,7 +45,12 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
         int config_version = getConfig().getInt("config_version");
         if (config_version < 3)
         {
-            // do some
+            getConfig().set("config.sphere.calculation.ad_factor", 20);
+            getConfig().set("config.sphere.calculation.rad_factor", 2);
+            getConfig().set("config.sphere.display.frequency", 20);
+            getConfig().set("config.sphere.display.duration", 400);
+            getConfig().set("config_version", 3);
+            saveConfig();
         }
     }
 }
