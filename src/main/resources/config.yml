@@ -1,0 +1,19 @@
+config:
+  particle:
+    particle_type: VILLAGER_HAPPY
+    particle_data:
+      color:
+        r: 0
+        g: 0
+        b: 0
+      size: 1.0
+
+messages:
+  prefix: "&7[&5CTRZ&7] &b:"
+  import: "%prefix% &aImport completed!"
+  reload: "%prefix% &aReload completed!"
+  invalid_number_args: "%prefix% &cInvalid number of arguments."
+  invalid_argument: "%prefix% &cInvalid argument &9%arg%&c."
+  no_permission: "&cNo permission."
+
+config_version: 2

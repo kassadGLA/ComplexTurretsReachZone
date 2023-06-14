@@ -1,0 +1,13 @@
+name: ComplexTurretsReachZone
+version: '${project.version}'
+main: gla.kassad.complexturretsreachzone.ComplexTurretsReachZone
+api-version: 1.19
+depend: [ComplexTurrets]
+author: kassad
+prefix: CTRZ
+commands:
+  ctrz:
+    description: Main plugin command
+    usage: /<command> [reimport|reload]
+
+
