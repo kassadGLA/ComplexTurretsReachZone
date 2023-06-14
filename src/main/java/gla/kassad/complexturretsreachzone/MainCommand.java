@@ -33,7 +33,6 @@ public class MainCommand implements CommandExecutor, TabCompleter
                 }
                 else
                 {
-                    System.out.println("I AM HERE");
                     sendMessage(player, "no_permission");
                 }
             }
