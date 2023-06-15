@@ -2,10 +2,14 @@ config:
   sphere:
     calculation:
       ad_factor: 20
-      rad_factor: 2
+      rad_factor: 1
     display:
       frequency: 20
       duration: 400
+
+  threads:
+    particles_per_thread: 2147483647
+    calculation_info: false
 
   particle:
     particle_type: VILLAGER_HAPPY
@@ -24,4 +28,4 @@ messages:
   invalid_argument: "%prefix% &cInvalid argument &9%arg%&c."
   no_permission: "&cNo permission."
 
-config_version: 3
+config_version: 4

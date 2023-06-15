@@ -3,10 +3,7 @@ package gla.kassad.complexturretsreachzone.listener;
 import com.google.common.collect.Lists;
 import ct.ajneb97.api.TurretRightClickEvent;
 import gla.kassad.complexturretsreachzone.ComplexTurretsReachZone;
-import org.bukkit.Color;
-import org.bukkit.Location;
-import org.bukkit.Particle;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -53,6 +50,7 @@ public class TurretRightClick implements Listener
                 long cycles = plugin.getConfig().getLong("config.sphere.display.duration") / frequency;
                 Particle particle = Particle.valueOf(plugin.getConfig().getString("config.particle.particle_type").toUpperCase());
                 Particle.DustOptions data;
+                int ppt = plugin.getConfig().getInt("config.threads.particles_per_thread");
                 if ("REDSTONE".equals(plugin.getConfig().getString("config.particle.particle_type").toUpperCase()))
                 {
                     int r = setRGB(plugin.getConfig().getInt("config.particle.particle_data.color.r"));
@@ -70,17 +68,16 @@ public class TurretRightClick implements Listener
                 }
                 new BukkitRunnable()
                 {
-                    long i = cycles;
-
                     @Override
                     public void run()
                     {
                         List<Location> sphere = calculation(player, radius, world, xC, yC, zC);
-                        List<List<Location>> sphereLists = Lists.partition(sphere, 10000);
+                        List<List<Location>> sphereLists = Lists.partition(sphere, ppt);
                         for (List<Location> list : sphereLists)
                         {
                             new BukkitRunnable()
                             {
+                                long i = cycles;
                                 @Override
                                 public void run()
                                 {
@@ -88,18 +85,17 @@ public class TurretRightClick implements Listener
                                     {
                                         spawnParticle(player, spherePoint, particle, data);
                                     }
+                                    if (i == 0)
+                                    {
+                                        activeSpheres.remove(turretID);
+                                        this.cancel();
+                                    }
+                                    i--;
                                 }
-                            }.runTaskAsynchronously(plugin);
+                            }.runTaskTimerAsynchronously(plugin, 0L, frequency);
                         }
-
-                        if (i == 0)
-                        {
-                            activeSpheres.remove(turretID);
-                            this.cancel();
-                        }
-                        i--;
                     }
-                }.runTaskTimerAsynchronously(plugin, 0L, frequency);
+                }.runTaskAsynchronously(plugin);
             }
         }
     }
@@ -118,12 +114,15 @@ public class TurretRightClick implements Listener
         double zR;
         double angle = 0;
         double rotationAngle;
+        int calculations = 0;
+        int spherePoints;
         while (angle < pi * 2)
         {
             x = rounder(Math.sin(angle) * radius);
             y = rounder(Math.cos(angle) * radius);
             mapKey = "_" + (x + xC) + (y + yC) + (z + zC);
             map.put(mapKey, locationConstructor(world, x + xC, y + yC, z + zC));
+            calculations++;
             rotationAngle = pi / rotationAngleDivider;
             while (rotationAngle < pi)
             {
@@ -131,6 +130,7 @@ public class TurretRightClick implements Listener
                 zR = rounder(Math.sin(rotationAngle) * x * -1);
                 mapKey = "_" + (xR + xC) + (y + yC) + (zR + zC);
                 map.put(mapKey, locationConstructor(world, xR + xC, y + yC, zR + zC));
+                calculations++;
                 rotationAngle += pi / rotationAngleDivider;
             }
             angle += pi / angleDivider;
@@ -146,9 +146,14 @@ public class TurretRightClick implements Listener
                 z = rounder(Math.sin(rotationAngle) * Math.cos(angle) * radius);
                 mapKey = "_" + (x + xC) + (y + yC) + (z + zC);
                 map.put(mapKey, locationConstructor(world, x + xC, y + yC, z + zC));
+                calculations++;
                 angle += pi / angleDivider;
             }
             rotationAngle += pi / rotationAngleDivider;
+        }
+        if (plugin.getConfig().getBoolean("config.threads.calculation_info"))
+        {
+            sendInfo(player, calculations, map.size());
         }
         return new ArrayList<>(map.values());
     }
@@ -165,12 +170,13 @@ public class TurretRightClick implements Listener
 
     private static int setRGB(int i)
     {
-        if (i<0){
-            i=0;
-        }
-        if(i>255)
+        if (i < 0)
         {
-            i=255;
+            i = 0;
+        }
+        if (i > 255)
+        {
+            i = 255;
         }
         return i;
     }
@@ -185,5 +191,14 @@ public class TurretRightClick implements Listener
         {
             player.spawnParticle(particle, location, 1, data);
         }
+    }
+
+    private static void sendInfo(Player player, int n, int m)
+    {
+        int ppt = plugin.getConfig().getInt("config.threads.particles_per_thread");
+        int threads = (int) Math.round(m / ppt + 0.5);
+        String message = "\n&7┏\n&7┃ &6Total calculations: &b" +n + "\n&7┃ &6Sphere points: &b" +m + "\n&7┃ &6Threads: &b" +threads + "\n&7┗";
+        message = ChatColor.translateAlternateColorCodes('&', message);
+        player.sendMessage(message);
     }
 }

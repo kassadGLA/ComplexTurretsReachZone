@@ -24,7 +24,7 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        // Add some msg
     }
 
     public Radius getRadius()
@@ -43,13 +43,15 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
     private void configUpdate()
     {
         int config_version = getConfig().getInt("config_version");
-        if (config_version < 3)
+        if (config_version < 4)
         {
             getConfig().set("config.sphere.calculation.ad_factor", 20);
             getConfig().set("config.sphere.calculation.rad_factor", 2);
             getConfig().set("config.sphere.display.frequency", 20);
             getConfig().set("config.sphere.display.duration", 400);
-            getConfig().set("config_version", 3);
+            getConfig().set("config.threads.particles_per_thread", 2147483647);
+            getConfig().set("config.threads.calculation_info", false);
+            getConfig().set("config_version", 4);
             saveConfig();
         }
     }
