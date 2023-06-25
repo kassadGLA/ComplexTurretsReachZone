@@ -1,31 +1,23 @@
 package gla.kassad.complexturretsreachzone;
 
-import gla.kassad.complexturretsreachzone.data.Players;
 import gla.kassad.complexturretsreachzone.data.Radius;
-import gla.kassad.complexturretsreachzone.listener.PlayerJoin;
-import gla.kassad.complexturretsreachzone.listener.PlayerQuit;
 import gla.kassad.complexturretsreachzone.listener.TurretRightClick;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.File;
-import java.util.HashMap;
 
 public final class ComplexTurretsReachZone extends JavaPlugin {
 
     private Radius radius;
-    private Players players;
 
     @Override
     public void onEnable() {
         getConfig().options().copyDefaults();
         saveDefaultConfig();
         this.radius = new Radius(Radius.loadRadii());
-        this.players = new Players(new HashMap<>());
         getCommand("ctrz").setExecutor(new MainCommand());
         getCommand("ctrz").setTabCompleter(new MainCommand());
         getServer().getPluginManager().registerEvents(new TurretRightClick(), this);
-        getServer().getPluginManager().registerEvents(new PlayerJoin(this), this);
-        getServer().getPluginManager().registerEvents(new PlayerQuit(this), this);
         importRadiiOnLoad();
         configUpdate();
     }
@@ -38,11 +30,6 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
     public Radius getRadius()
     {
         return radius;
-    }
-
-    public Players getPlayers()
-    {
-        return players;
     }
 
     private void importRadiiOnLoad()
