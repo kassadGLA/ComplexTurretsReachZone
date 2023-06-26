@@ -153,7 +153,10 @@ public class TurretRightClick implements Listener
         }
         if (plugin.getConfig().getBoolean("config.threads.calculation_info"))
         {
-            sendInfo(player, calculations, map.size());
+            if (player.hasPermission("complexturretsreachzone.admin"))
+            {
+                sendInfo(player, calculations, map.size());
+            }
         }
         return new ArrayList<>(map.values());
     }

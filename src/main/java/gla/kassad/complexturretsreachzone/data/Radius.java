@@ -1,4 +1,4 @@
-package gla.kassad.complexturretsreachzone.sphere;
+package gla.kassad.complexturretsreachzone.data;
 
 import gla.kassad.complexturretsreachzone.ComplexTurretsReachZone;
 import org.bukkit.configuration.file.FileConfiguration;
