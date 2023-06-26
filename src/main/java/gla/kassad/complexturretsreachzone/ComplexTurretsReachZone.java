@@ -2,7 +2,9 @@ package gla.kassad.complexturretsreachzone;
 
 import gla.kassad.complexturretsreachzone.data.Radius;
 import gla.kassad.complexturretsreachzone.listener.TurretRightClick;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bstats.bukkit.Metrics;
 
 import java.io.File;
 
@@ -20,11 +22,14 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new TurretRightClick(), this);
         importRadiiOnLoad();
         configUpdate();
+        int pluginId = 18885;
+        new Metrics(this, pluginId);
+        enableMsg();
     }
 
     @Override
     public void onDisable() {
-        // Add some msg
+        disableMsg();
     }
 
     public Radius getRadius()
@@ -38,6 +43,20 @@ public final class ComplexTurretsReachZone extends JavaPlugin {
         {
             MainCommand.importRadii(null);
         }
+    }
+
+    private void enableMsg()
+    {
+        String msg = "&7[&5ComplexTurretsReachZone&7] &ehas been enabled.";
+        msg = ChatColor.translateAlternateColorCodes('&', msg);
+        getServer().getConsoleSender().sendMessage(msg);
+    }
+
+    private void disableMsg()
+    {
+        String msg = "&7[&5ComplexTurretsReachZone&7] &ehas been disabled.";
+        msg = ChatColor.translateAlternateColorCodes('&', msg);
+        getServer().getConsoleSender().sendMessage(msg);
     }
 
     private void configUpdate()
