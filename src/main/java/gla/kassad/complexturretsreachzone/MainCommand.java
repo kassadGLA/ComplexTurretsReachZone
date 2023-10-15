@@ -34,6 +34,7 @@ public class MainCommand implements CommandExecutor, TabCompleter
                 else
                 {
                     sendMessage(player, "no_permission");
+                    return false;
                 }
             }
             else
@@ -59,7 +60,6 @@ public class MainCommand implements CommandExecutor, TabCompleter
             else if ("reload".equalsIgnoreCase(a[0]))
             {
                 plugin.reloadConfig();
-                plugin.getCommand("ctrz").setPermissionMessage(plugin.getConfig().getString("messages.no_permission"));
                 sendMessage(player, "reload");
             }
             else
